@@ -57,11 +57,8 @@ public class BaseTest {
     @Test
     public void checkUrl() throws InterruptedException {
         By closeAdd = By.xpath("//img[@alt = 'Close']");
-
-
-        Thread.sleep(1000);
-        WebElement close = wait.until(ExpectedConditions.visibilityOfElementLocated(closeAdd));
-        close.click();
+         Thread.sleep(1000);
+         wait.until(ExpectedConditions.visibilityOfElementLocated(closeAdd)).click();
         Assertions.assertEquals(driver.getCurrentUrl(), url);
         System.out.println(driver.getCurrentUrl());
 

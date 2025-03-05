@@ -1,0 +1,61 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'io.github.bonigarcia', name: 'webdrivermanager', version: '5.6.4'
+
+
+    testImplementation 'org.testng:testng:7.7.0'
+    implementation group: 'org.seleniumhq.selenium', name: 'selenium-api', version: '4.16.1'
+    implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.11.0'
+// https://mvnrepository.com/artifact/com.aventstack/extentreports
+    implementation group: 'com.aventstack', name: 'extentreports', version: '5.1.2'
+
+  // implementation 'org.seleniumhq.selenium:selenium-java:4.15.0'
+    testImplementation 'io.github.bonigarcia:webdrivermanager:5.5.2'
+    implementation group: 'com.github.javafaker', name: 'javafaker', version: '1.0.2'
+       implementation 'com.opencsv:opencsv:5.7.1'
+    implementation 'io.cucumber:cucumber-testng:7.9.0'
+    implementation 'io.cucumber:cucumber-core:7.9.0'
+    implementation 'io.cucumber:cucumber-java:7.9.0'
+    implementation 'io.cucumber:gherkin:25.0.2'
+}
+
+test {
+    useTestNG() {
+        suites "src/test/resources/TestNG.xml"
+    }
+}
+task regression(type: Test) {
+    useTestNG() {
+        suites "src/test/resources/Regression.xml"
+    }
+}
+
+
+task smoke(type: Test) {
+    useTestNG() {
+        suites "src/test/resources/Smoke.xml"
+        systemProperty"browser",System.getProperty("browser")
+
+    }
+}
+task playSong(type: Test) {
+    useTestNG() {
+        suites "src/test/resources/PlaySong.xml"
+
+    }
+}
+test {
+    useTestNG() {
+        suites "src/test/resources/Cucumber.xml"
+    }
+}

@@ -1,0 +1,10 @@
+li:nth-of-type(1) > .theme > .name;0
+li:nth-of-type(2) > .theme > .name;1
+li:nth-of-type(3) > .theme > .name;2
+li:nth-of-type(4) > .theme > .name;3
+li:nth-of-type(5) > .theme > .name;4
+li:nth-of-type(6) > .theme > .name;5
+li:nth-of-type(7) > .theme > .name;6
+li:nth-of-type(8) > .theme > .name;7
+li:nth-of-type(9) > .theme > .name;8
+

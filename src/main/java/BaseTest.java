@@ -7,7 +7,7 @@ import java.util.Map;
 public class BaseTest {
 public String urlAuth = "https://qa.koel.app/api/me";
 public String urlAppData = "https://qa.koel.app/api/data";
-public String urlPlaylist = "https://qa.koel.app/api/playlist";
+public String urlPlaylist = "https://qa.koel.app/api/playlist/";
 public String email = "vikenty.plakhov@testpro.io";
 public String password = "MEGAdelta06";
 

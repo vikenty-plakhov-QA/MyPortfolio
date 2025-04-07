@@ -14,7 +14,7 @@
 
     },
     "songs": {
-      "type": "aray"
+      "type": "array"
     },
     "is_smart": {
       "type": "boolean"

@@ -5,6 +5,9 @@ import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +46,29 @@ public class userRegTest extends BaseTest {
                 .andReturn();
         System.out.println(responseLogOutUser.asString());
         assertEquals(responseLogOutUser.statusCode(),204,"Unexpected Status Code");
+
+    }
+    @ParameterizedTest
+    @CsvSource({"vikenty.plakhov@testpro.io,200",//"longlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglong@gmail.com,401",
+    /*"gmail.com,422",*/"\"\",302",/*"null,302"*/})
+
+    public void negativeAuthWithInvalidEmail(String email,int code){
+        Map<String, String> userData = new HashMap<>();
+        userData.put("email",email);
+        userData.put("password",password);
+        Map<String,String>headers = new HashMap<>();
+
+        headers.put("Content-Type","application/json");
+        Response response= RestAssured.given()
+                .body(userData)
+                .headers(headers)
+                .post(urlAuth)
+                .andReturn();
+       int token = response.getStatusCode();
+        System.out.println(token);
+        response.prettyPrint();
+    //   Assertions.assertEquals(code, response.statusCode());
+
 
     }
 

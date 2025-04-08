@@ -10,15 +10,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static io.restassured.module.jsv.JsonSchemaValidator.*;
 import static io.restassured.path.json.JsonPath.given;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasKey;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PlaylistTests extends BaseTest {
+    int pList_id;
     @Epic("Playlist management")
     @Feature("Create PlayList")
     @Test
@@ -48,7 +49,7 @@ public class PlaylistTests extends BaseTest {
                 .post(urlPlaylist)
                 .jsonPath();
         String pListName = response.getString("name");
-        int pList_id = response.get("id");
+         pList_id = response.get("id");
         System.out.println(pListName + "-----" + pList_id);
         Assertions.assertEquals(pListName, "Once upon a time", "PlistName in response doesn't match to entered ");
 
@@ -86,16 +87,52 @@ public class PlaylistTests extends BaseTest {
                 .headers(getAuthHeaders())
                 .post(urlPlaylist)
                 .jsonPath();
-        int pList_id = response.get("id");
+         pList_id = response.get("id");
         Map<String, String> bodyNew = new HashMap<>();
         bodyNew.put("name", "Urban Killer");
         Response responseForNew = RestAssured.given()
                 .headers(getAuthHeaders())
                 .body(bodyNew)
-                .put(urlPlaylist + pList_id)
+                .put(urlPlaylist +(pList_id))
                 .andReturn();
         Assertions.assertEquals(200, responseForNew.statusCode(), "Unexpected Status Code");
         Assertions.assertEquals("Urban Killer", responseForNew.jsonPath().getString("name"));
+
+    }
+    @Test
+    public void replacePlistContent(){
+        //create plist
+        Map<String, String> body = new HashMap<>();
+        body.put("name", "Once upon a time");
+        JsonPath response = RestAssured.given()
+                .body(body)
+                .headers(getAuthHeaders())
+                .post(urlPlaylist)
+                .jsonPath();
+
+        pList_id = response.get("id");
+        System.out.println(pList_id);
+        //add song to th pList
+        Map<String,List<String>> songs = new HashMap<>();
+        songs.put("songs", Arrays.asList("da98f9eb65971e2d76d9ec3640bab317","cf03e66adbdf8380a2e993fdbf93b3fe"));
+        RestAssured.given()
+                .headers(getAuthHeaders())
+                .body(songs)
+                .put(urlPlaylist+pList_id+"/sync")
+                .andReturn();
+        //Check this song in the pList
+        List<String>songList = new ArrayList<>();
+        Response responseForCheck = RestAssured.given()
+                .headers(getAuthHeaders())
+                .get(urlPlaylist+pList_id+"/songs")
+                .andReturn();
+        songList = responseForCheck.jsonPath().getList("",String.class);
+        responseForCheck.then().assertThat().body("$",hasItem("da98f9eb65971e2d76d9ec3640bab317"));
+        //Just for double check - delete before prod!
+        System.out.println("songs");
+        for (String song:songList){
+            System.out.println(song);
+        }
 
     }
 }
